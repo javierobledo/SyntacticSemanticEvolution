@@ -5,7 +5,7 @@ The read_xml module supplies multiple function for unzip, read and store XML fil
 """
 from zipfile import ZipFile
 import os
-
+from configparser import ConfigParser
 
 def unzip_ecco_tcp_xmls(origin_directory, destination_directory):
     """
@@ -17,7 +17,7 @@ def unzip_ecco_tcp_xmls(origin_directory, destination_directory):
     >>> unzip_ecco_tcp_xmls("/home/jrobledo/foo","/home/jrobledo/bar")
     Traceback (most recent call last):
         ...
-    IOError: The dataset directory doesn't exist
+    OSError: The dataset directory doesn't exist
     """
     if not files_actually_unziped(origin_directory, destination_directory):
             for file in os.listdir(origin_directory):
@@ -35,7 +35,7 @@ def files_actually_unziped(origin_directory, destination_directory):
     >>> files_actually_unziped("/home/jrobledo/foo","/home/jrobledo/bar")
     Traceback (most recent call last):
         ...
-    IOError: The dataset directory doesn't exist
+    OSError: The dataset directory doesn't exist
     """
     names = []
     if not os.path.exists(origin_directory):
@@ -47,6 +47,29 @@ def files_actually_unziped(origin_directory, destination_directory):
             names += ZipFile(os.path.join(origin_directory, file)).namelist()
     other_names = os.listdir(destination_directory)
     return len(set(names) & set(other_names)) == len(set(names))
+
+
+def read_db_config(filename='/home/jrobledo/PycharmProjects/SyntacticSemanticEvolution/config.ini', section='mysql'):
+    """ Read database configuration file and return a dictionary object
+    :param filename: name of the configuration file
+    :param section: section of database configuration
+    :return: a dictionary of database parameters
+    >>> sorted(read_db_config().items())
+    [('database', 'ecco_tcp'), ('host', 'localhost'), ('password', 'root'), ('user', 'root')]
+    """
+    # create parser and read ini configuration file
+    parser = ConfigParser()
+    parser.read(filename)
+    # get section, default to mysql
+    db = {}
+    if parser.has_section(section):
+        items = parser.items(section)
+        for item in items:
+            db[item[0]] = item[1]
+    else:
+        raise Exception('{0} not found in the {1} file'.format(section, filename))
+
+    return db
 
 
 if __name__ == "__main__":
