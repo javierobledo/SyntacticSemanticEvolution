@@ -7,6 +7,7 @@ from zipfile import ZipFile
 import os
 from configparser import ConfigParser
 
+
 def unzip_ecco_tcp_xmls(origin_directory, destination_directory):
     """
     Create, if doesn't exist, the destination_directory and unzip all zip files contained in origin_directory.
@@ -18,21 +19,22 @@ def unzip_ecco_tcp_xmls(origin_directory, destination_directory):
     Traceback (most recent call last):
         ...
     OSError: The dataset directory doesn't exist
+    >>> unzip_ecco_tcp_xmls("/home/jrobledo/Dropbox/ECCO-TCP","/home/jrobledo/bar")
     """
-    if not files_actually_unziped(origin_directory, destination_directory):
+    if not files_actually_unzipped(origin_directory, destination_directory):
             for file in os.listdir(origin_directory):
                 if file.endswith(".zip"):
                     ZipFile(os.path.join(origin_directory, file)).extractall(destination_directory)
 
 
-def files_actually_unziped(origin_directory, destination_directory):
+def files_actually_unzipped(origin_directory, destination_directory):
     """
     Verifies if the origin_directory with zipped files are actually unzipped. If files are unzipped, return True.
     Returns False otherwise. If the origin_directory doesn't exist an IOError is raised.
     :param origin_directory: The directory's path where ECCO-TCP zip files are stored
     :param destination_directory: The directory's path where the ECCO-TCP dataset will be unzipped
     :return: True or False
-    >>> files_actually_unziped("/home/jrobledo/foo","/home/jrobledo/bar")
+    >>> files_actually_unzipped("/home/jrobledo/foo","/home/jrobledo/bar")
     Traceback (most recent call last):
         ...
     OSError: The dataset directory doesn't exist
@@ -55,7 +57,7 @@ def read_db_config(filename='/home/jrobledo/PycharmProjects/SyntacticSemanticEvo
     :param section: section of database configuration
     :return: a dictionary of database parameters
     >>> sorted(read_db_config().items())
-    [('database', 'ecco_tcp'), ('host', 'localhost'), ('password', 'root'), ('user', 'root')]
+    [('host', 'localhost'), ('password', 'root'), ('user', 'root')]
     """
     # create parser and read ini configuration file
     parser = ConfigParser()
