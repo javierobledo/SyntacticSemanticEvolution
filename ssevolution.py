@@ -1,6 +1,6 @@
 from mysql.connector import MySQLConnection, Error, errorcode
-from corpus.eccotcp.read_xml import read_db_config
 
+from SyntacticSemanticEvolution.corpus.eccotcp.read_xml import read_db_config
 
 DB_NAME = 'ecco_tcp'
 
